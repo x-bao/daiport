@@ -78,7 +78,7 @@
         position: absolute;
         left: 100%;
         bottom: 0;
-        border: 1px solid #e2e2e2;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
         border-radius: 5px;
         width: auto;
         padding: 0;
@@ -87,9 +87,11 @@
         &-item {
             width: auto;
             padding: .5em;
-            border-bottom: 1px solid #e2e2e2;
+            &:first-of-type {
+                border-radius: 5px 5px 0 0;
+            }
             &:last-of-type {
-                border: 0;
+                border-radius: 0 0 5px 5px;
             }
             &:hover {
                 background-color: #f5f5f5;

@@ -150,9 +150,18 @@ li {
     padding: 0;
     list-style: none;
     &--empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
-        font-size: 24px;
+        font-size: 14px;
         padding: 1em 0;
+        .empty-icon {
+            width: 40px;
+            height: 40px;
+            vertical-align: middle;
+            margin-bottom: .5em;
+        }
     }
 }
 
@@ -323,6 +332,7 @@ li {
             <input
                 class="new-todo"
                 autofocus
+                ref="todo"
                 autocomplete="off"
                 :placeholder="placeholder"
                 v-model="newTodo"
@@ -334,7 +344,10 @@ li {
         <section class="main" v-show="todos.length && type !== 'preview'" v-cloak>
             <input id="toggle-all" class="toggle-all" type="checkbox" v-model="allDone" />
             <label for="toggle-all" v-show="type === 'today'"></label>
-            <div class="todo-list--empty" v-if="filteredTodos.length === 0 && type === 'today'">空空如也</div>
+            <div class="todo-list--empty" v-if="filteredTodos.length === 0">
+                <img class="empty-icon" src="../assets/emptylist.svg" alt="empty-list">
+                空空如也
+            </div>
             <ul class="todo-list" v-else>
                 <li
                     v-for="todo in filteredTodos"
@@ -495,10 +508,17 @@ export default {
         },
         initKeyEvent() {
             window.addEventListener('keyup', ({key}) => {
-                if (this.disableKeyEvent) {
+                const $todo = this.$refs.todo;
+                if (this.disableKeyEvent || this.isEmpty) {
+                    if (this.isEmpty && $todo) {
+                        key === 'Escape' ? $todo.blur() : $todo.focus();
+                    }
                     return;
                 }
                 switch(key) {
+                    case 'Escape':
+                        $todo && $todo.blur();
+                        break;
                     case 'y':
                         this.type = 'yestoday';
                         break;

@@ -116,7 +116,7 @@ export default {
     data() {
         return {
             config: {
-                url: '-',
+                url: 'https://tapd.cn',
                 types: ['会议'],
                 autojump: 1
             }
@@ -124,7 +124,9 @@ export default {
     },
     mounted() {
         const config = storage.get(STORAGE_KEY);
-        this.$set(this, 'config', config);
+        const defaultConfig = this.config;
+        Object.assign(defaultConfig, config);
+        this.config = defaultConfig;
     },
     methods: {
         onDone({context, key, value}) {
