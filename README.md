@@ -1,4 +1,10 @@
-# daiport
+# Daiport
+
+> Daily report
+
+A tool to generate daily report.
+
+## Run
 
 ## Project setup
 ```
@@ -15,5 +21,9 @@ yarn serve
 yarn build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 作者
+
+**Daiport** © [San Baofeng](https://github.com/x-bao), Released under the [MIT](./LICENSE) License.<br>
+Authored and maintained by San Baofeng
+
+> [San Baofeng's](https://arts.sanbaofengs.com) · GitHub [@San Baofeng](https://github.com/x-bao) · Twitter [@Baofeng15](https://twitter.com/sanbaofeng
