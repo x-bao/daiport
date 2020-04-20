@@ -132,6 +132,9 @@ li {
     &:hover {
         cursor: pointer;
     }
+    &[disabled] {
+        cursor: not-allowed;
+    }
 }
 
 .toggle-all + label:before {
@@ -139,6 +142,9 @@ li {
     font-size: 22px;
     color: #e6e6e6;
     padding: 10px 27px 10px 27px;
+    &:disabled {
+        cursor: not-allowed;
+    }
 }
 
 .toggle-all:checked + label:before {
@@ -342,11 +348,11 @@ li {
             />
         </header>
         <section class="main" v-show="todos.length && type !== 'preview'" v-cloak>
-            <input id="toggle-all" class="toggle-all" type="checkbox" v-model="allDone" />
-            <label for="toggle-all" v-show="type === 'today'"></label>
-            <div class="todo-list--empty" v-if="filteredTodos.length === 0">
+            <input id="toggle-all" class="toggle-all" type="checkbox" v-model="allDone" :disabled="disableClearAll" />
+            <label for="toggle-all" v-show="type === 'today'" :disabled="disableClearAll" ></label>
+            <div class="todo-list--empty" v-if="filteredTodos.length === 0 && isTodoPage">
                 <img class="empty-icon" src="../assets/emptylist.svg" alt="empty-list">
-                空空如也
+                又是摸鱼的好日子
             </div>
             <ul class="todo-list" v-else>
                 <li
@@ -356,12 +362,7 @@ li {
                     :class="{completed: todo.completed, editing: todo == editedTodo}"
                 >
                     <div class="view">
-                        <input
-                            class="toggle"
-                            type="checkbox"
-                            v-model="todo.completed"
-                            :disabled="type !== 'today'"
-                        />
+                        <input class="toggle" type="checkbox" v-model="todo.completed" :disabled="type !== 'today'" />
                         <label @click="toggleAdditions(todo)" @dblclick="editTodo(todo)" v-html="todo.title"></label>
                         <button class="destroy" @click="removeTodo(todo)"></button>
                     </div>
@@ -462,7 +463,7 @@ export default {
         },
         allDone: {
             get: function() {
-                return this.remaining === 0;
+                return this.remaining === 0 && this.filteredTodos.length > 0;
             },
             set: function(value) {
                 this.filteredTodos.forEach(function(todo) {
@@ -477,9 +478,15 @@ export default {
         isEmpty() {
             return !this.todos.length;
         },
+        disableClearAll() {
+            return this.filteredTodos.length === 0;
+        },
         canAddTodo() {
             return this.type === 'today' || this.type === 'tomorrow';
         },
+        isTodoPage() {
+            return this.type === 'yestoday' || this.type === 'today' || this.type === 'tomorrow';
+        }
     },
 
     mounted() {
@@ -491,7 +498,7 @@ export default {
         init() {
             this.todos = storage.fetch(STORAGE_KEY).reduce((acc, cur) => {
                 if (cur.date === yestoday) {
-                acc.push(cur);
+                    acc.push(cur);
                     if (cur.progress * 1 < 100 && !cur.copied) {
                         const copied = JSON.parse(JSON.stringify(cur));
                         cur.copied = true;

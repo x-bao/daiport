@@ -96,6 +96,10 @@
             &:hover {
                 background-color: #f5f5f5;
             }
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
         }
     }
 }
@@ -118,6 +122,7 @@
             <ul class="more__action">
                 <li class="more__action-item" @click="onChange('preview')">Preview</li>
                 <li class="more__action-item" @click="onChange('setting')">Setting</li>
+                <li class="more__action-item"><a href="https://github.com/x-bao/daiport/issues" target="_blank">Issues</a></li>
             </ul>
         </div>
     </footer>
