@@ -83,6 +83,12 @@
             </div>
         </li>
         <li class="setting__item">
+            <div class="setting__item-title">Motto：</div>
+            <div class="setting__item-content setting__item-content__autojump">
+                <ELabel :content="config.motto" lkey="motto" :context="config" @done="onDone"></ELabel>
+            </div>
+        </li>
+        <li class="setting__item">
             <div class="setting__item-title">类型：</div>
             <ul class="setting__item-content setting__item-content__types">
                 <li class="setting__item-content-type" v-for="(type, index) in config.types" :key="index">
@@ -115,10 +121,15 @@ export default {
     },
     data() {
         return {
+            default: {
+                url: 'https://tapd.cn',
+                motto: 'Rest or Rust'
+            },
             config: {
                 url: 'https://tapd.cn',
                 types: ['会议'],
-                autojump: 1
+                autojump: 1,
+                motto: 'Rest or Rust'
             }
         }
     },

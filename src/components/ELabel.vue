@@ -94,6 +94,7 @@
 import storage from '../utils/storage';
 
 export default {
+    inject: ['todoCtx'],
     props: {
         lkey: [String, Number],
         content: String,
@@ -113,6 +114,7 @@ export default {
                 this.showSelections = value;
                 clearTimeout(timer);
             }, 50);
+            this.todoCtx.disableKeyEvent = value;
         }
     },
     data() {

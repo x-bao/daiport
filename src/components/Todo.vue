@@ -352,7 +352,7 @@ li {
             <label for="toggle-all" v-show="type === 'today'" :disabled="disableClearAll" ></label>
             <div class="todo-list--empty" v-if="filteredTodos.length === 0 && isTodoPage">
                 <img class="empty-icon" src="../assets/emptylist.svg" alt="empty-list">
-                又是摸鱼的好日子
+                {{motto}}
             </div>
             <ul class="todo-list" v-else>
                 <li
@@ -427,13 +427,19 @@ const STORAGE_KEY = "daiport";
 
 export default {
     components: {Actions, ELabel, Preview, Setting},
+    provide() {
+        return {
+            todoCtx: this
+        };
+    },
 
     data() {
         return {
             todos: [],
             newTodo: '',
             editedTodo: null,
-            type: 'today'
+            type: 'today',
+            disableKeyEvent: false
         };
     },
 
@@ -486,6 +492,10 @@ export default {
         },
         isTodoPage() {
             return this.type === 'yestoday' || this.type === 'today' || this.type === 'tomorrow';
+        },
+        motto() {
+            const motto = storage.get('config').motto;
+            return motto === '-' ? '' : motto;
         }
     },
 
@@ -516,8 +526,9 @@ export default {
         initKeyEvent() {
             window.addEventListener('keyup', ({key}) => {
                 const $todo = this.$refs.todo;
-                if (this.disableKeyEvent || this.isEmpty) {
-                    if (this.isEmpty && $todo) {
+                const isEmpty = this.filteredTodos.length === 0;
+                if (this.disableKeyEvent || isEmpty) {
+                    if (isEmpty && $todo) {
                         key === 'Escape' ? $todo.blur() : $todo.focus();
                     }
                     return;
@@ -587,6 +598,7 @@ export default {
             }
             this.beforeEditCache = todo.title;
             this.editedTodo = todo;
+            this.disableKeyEvent = true;
         },
 
         doneEdit(todo) {
@@ -598,11 +610,13 @@ export default {
             if (!todo.title) {
                 this.removeTodo(todo);
             }
+            this.disableKeyEvent = false;
         },
 
         cancelEdit(todo) {
             this.editedTodo = null;
             todo.title = this.beforeEditCache;
+            this.disableKeyEvent = false;
         },
 
         onChangeType(type) {

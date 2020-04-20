@@ -115,7 +115,6 @@
             <li :class="['filters-item', { selected: type == 'yestoday' }]" @click="onChange('yestoday')">Yestoday</li>
             <li :class="['filters-item', { selected: type == 'today' }]" @click="onChange('today')">Today</li>
             <li :class="['filters-item', { selected: type == 'tomorrow' }]" @click="onChange('tomorrow')">Tomorrow</li>
-            <!-- <li :class="['filters-item', { selected: type == 'preview' }]" @click="onChange('preview')">Preview</li> -->
         </ul>
         <div class="more">
             <img class="img" src="../assets/more.svg" alt="" />
